@@ -125,3 +125,17 @@ Installation des dépendances :
    - Permettre la réutilisation du code
    - Simplifier les tests
 
+### Screenshots
+
+#### Redis Cache Check
+![Redis Cache Check](./screenshots/checkredisCach.png)
+
+#### Redis Cache Check (Alternative View)
+![Redis Cache Check Alternative](./screenshots/checkredisCach.png)
+
+#### Redis Connection Test
+![Redis Connection Test](./screenshots/TestRedisConnection.png)
+
+#### Student Endpoints Test
+![Student Endpoints Test](./screenshots/testStudentsEndPoints.png)
+
