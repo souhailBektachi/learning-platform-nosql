@@ -33,16 +33,34 @@ async function connectMongo() {
 }
 
 async function connectRedis() {
-  // TODO: Implémenter la connexion Redis
-  // Gérer les erreurs et les retries
   try {
-    redisClient = redis.createClient(config.redis);
+    redisClient = redis.createClient({
+      url: config.redis.uri,
+      password: config.redis.password,
+      socket: {
+        reconnectStrategy: (retries) => {
+          if (retries > 10) {
+            return new Error('Redis connection retries exhausted');
+          }
+          return Math.min(retries * 100, 3000);
+        }
+      }
+    });
+
+    await redisClient.connect();
+    
     redisClient.on('connect', () => {
       console.log('Connected to Redis');
     });
+    
     redisClient.on('error', (error) => {
-      console.error('Failed to connect to Redis:', error);
+      console.error('Redis Error:', error);
     });
+
+    // Test authentication
+    await redisClient.ping();
+    console.log('Redis authentication successful');
+
     return redisClient;
   } catch (error) {
     console.error('Failed to connect to Redis:', error);

@@ -7,6 +7,7 @@ const config = require('./config/env');
 const db = require('./config/db');
 
 const courseRoutes = require('./routes/courseRoutes');
+const studentRoutes = require('./routes/studentRoutes');
 
 const app = express();
 
@@ -14,9 +15,17 @@ async function startServer() {
   try {
     await db.connectMongo();
     await db.connectRedis();
+    
+    // Test Redis connection
+    const redisService = require('./services/redisService');
+    const redisConnected = await redisService.testRedisConnection();
+    if (!redisConnected) {
+      throw new Error('Redis connection test failed');
+    }
 
     app.use(express.json());
     app.use('/courses', courseRoutes);
+    app.use('/students', studentRoutes);
 
     app.listen(config.port, () => {
       console.log(`Server is running on port ${config.port}`);
